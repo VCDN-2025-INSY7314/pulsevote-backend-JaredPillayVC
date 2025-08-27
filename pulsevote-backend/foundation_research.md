@@ -1,0 +1,3 @@
+## Foundation Research
+
+Security is critical in live polling because results can be easily distorted by bots or mass fake submissions, undermining trust and usefulness. Public links and low-friction voting make these systems attractive targets for automation, spam, and “vote stuffing,” as widely documented for generic online polls and classroom tools. Strong controls like rate limiting, session codes, identity and device signals, and anomaly detection help preserve integrity and fairness while protecting participant privacy. Without these safeguards, poll outcomes, user data, and the presenter’s session can be compromised, degrading both accuracy and user experience.
