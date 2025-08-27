@@ -1,30 +1,26 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const dotenv = require('dotenv');
 
-dotenv.config();
+const authRoutes = require('./routes/authRoutes');
+const { protect } = require('./middleware/authMiddleware');
 
 const app = express();
-
-// Basic hardening
 app.use(helmet());
-app.use(cors({ origin: true })); // adjust to your frontend origin later
 app.use(express.json());
 
-// Simple per-IP rate limit (tune later)
-const limiter = rateLimit({ windowMs: 60 * 1000, max: 120 });
-app.use(limiter);
+// adjust origin to your frontend dev URL
+app.use(cors({ origin: 'https://localhost:5173', credentials: true }));
 
-// Health/root
-app.get('/', (req, res) => {
-  res.send('PulseVote API running!');
-});
+app.get('/', (_req, res) => res.send('PulseVote API running!'));
 
-// JSON test endpoint
-app.get('/test', (req, res) => {
-  res.json({ message: 'Hello from PulseVote API', status: 'ok', ts: Date.now() });
+app.use('/api/auth', authRoutes);
+
+app.get('/api/protected', protect, (req, res) => {
+  res.json({
+    message: `Welcome, user ${req.user.id}! You have accessed protected data.`,
+    timestamp: new Date()
+  });
 });
 
 module.exports = app;
